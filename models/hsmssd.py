@@ -5,11 +5,7 @@ import torch
 import torch.nn as nn
 
 class HSMSSD(nn.Module):
-    """
-    Hidden-State Mixer (HSM-SSD)——完全保留原始算法思路，
-    但输入 x 的形状是 (B, C, L)，其中 L=H*W。
-    """
-
+    
     def __init__(self, d_model, ssd_expand=1, A_init_range=(1,16), state_dim=32):
         super().__init__()
         self.ssd_expand = ssd_expand
