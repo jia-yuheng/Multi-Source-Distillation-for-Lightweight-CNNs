@@ -74,6 +74,27 @@ These results demonstrate that the proposed distillation framework effectively i
 
 
 
+## Ablation Study on VanillaNet-6
+
+<div style="width: 90%; margin: 0 auto; text-align: justify;">
+
+<p align="center">
+  <img src="assets/Ablation_Study.png" style="width:100%;">
+</p>
+
+<b>Figure.</b> Ablation study of VanillaNet-6 on CIFAR-100 evaluating progressive integration of KD, AT, DWConv, Gated Activation, and HSM-SSD modules.
+
+We conduct a stepwise ablation study to analyze the contribution of each component in VanillaNet-6 under a structure–distillation co-optimization framework.
+
+Starting from the baseline (**67.65% Top-1**), Knowledge Distillation (KD) improves performance to **74.60%**, followed by Attention Transfer (AT) increasing it to **75.78%**, demonstrating the benefit of semantic and spatial supervision.
+
+Replacing standard convolutions with Depthwise Separable Convolution (DWConv) further improves accuracy to **77.98%**, while Gated Activation enhances nonlinear representation to **78.85%**.
+
+Finally, integrating the HSM-SSD module yields the best performance (**80.28% Top-1 / 95.22% Top-5**), confirming its effectiveness in capturing long-range dependencies with minimal computational overhead.
+
+Overall, each component provides consistent gains, and their combination demonstrates strong additive effects and structural compatibility for lightweight model optimization.
+
+</div>
 
 
 
