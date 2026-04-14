@@ -1,9 +1,3 @@
-# Copyright (C) 2023. Huawei Technologies Co., Ltd. All rights reserved.
-
-# This program is free software; you can redistribute it and/or modify it under the terms of the MIT License.
-
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the MIT License for more details.
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -13,20 +7,6 @@ from timm.models.registry import register_model
 from .hsmssd import HSMSSD
 
 
-'''
-能模拟 Swish/Mish 非线性表达（更光滑，信息保持好）。
-
-对小模型提升尤其有效（MobileViT、RepMLP 就用了类似机制）。
-
-计算量少，推理延迟几乎不变。
-
-下面有4处这样的修改：
-        #x = torch.nn.functional.leaky_relu(x, self.act_learn)
-        self.gate = GatedActivation(self.act_learn)
-        x = self.gate(x)
-'''
-# 非线性更强：它不仅保留了输入特征，还动态控制信息流（和 Swish、Mish 类似），能有效建模复杂模式。
-# 轻量模型友好：如 MobileViT、RepMLP 中使用 Gated 激活能提升模型表示力，避免额外计算开销。
 class GatedActivation(nn.Module):
     def __init__(self, act_learn=3.0):
         super().__init__()
@@ -36,8 +16,6 @@ class GatedActivation(nn.Module):
         return x * torch.sigmoid(self.act_learn * x)
 
 
-
-# 新增模块：FeatureAdapter
 class FeatureAdapter(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(FeatureAdapter, self).__init__()
@@ -49,8 +27,6 @@ class FeatureAdapter(nn.Module):
 
     def forward(self, x):
         return self.adapter(x)
-
-
 
 
 
@@ -86,8 +62,6 @@ class DepthwiseSeparableBlock(nn.Module):
         x = self.pool(x)
         x = self.act(x)
 
-        # === ① 可选：展平并拼成序列 (B, L, C) ===
-        # ---- HSM-SSD 全局混合 + 打印调试 ----
         if hasattr(self, 'use_hsm') and self.use_hsm:
             B, C, H, W = x.shape
             L = H * W
@@ -113,10 +87,9 @@ class DepthwiseSeparableBlock(nn.Module):
 
             # 用 y 替换 x
             x = y
-        # ====================================================
 
 
-        x = x * self.attn(x)   #模块是轻量版的 SE 注意力结构，仅用两层 1x1 卷积即可提升通道间表达选择性，几乎无计算负担。
+        x = x * self.attn(x)   
 
         if hasattr(self, 'adapter') and self.adapter is not None:
             adapter_feat = self.adapter(x)
@@ -135,12 +108,9 @@ class activation(nn.ReLU):
         self.act_num = act_num
         self.deploy = deploy
         self.dim = dim
-
-        #self.weight = torch.nn.Parameter(torch.randn(dim, 1, act_num * 2 + 1, act_num * 2 + 1))
-        # 替换为 dilation=2 的版本以增强 receptive field
         self.weight = torch.nn.Parameter(torch.randn(dim, 1, act_num * 2 + 1, act_num * 2 + 1))
         self.dilation = 2
-        self.padding = self.act_num * self.dilation  # 保证输出尺寸一致
+        self.padding = self.act_num * self.dilation 
 
 
         if deploy:
@@ -255,16 +225,13 @@ class VanillaNet(nn.Module):
     def __init__(self, in_chans=3, num_classes=1000, dims=[96, 192, 384, 768],
                  drop_rate=0, act_num=3, strides=[2, 2, 2, 1], deploy=False, ada_pool=None, **kwargs):
 
-        # 从命令行参数里取出 ratio（默认为 0.25），如果没传就用 0.25
+     
         self.hsm_state_dim_ratio = kwargs.pop('hsm_state_dim_ratio', 0.25)
 
         super().__init__()
 
-        # =========== ④ 接收 HSM-SSD 层索引列表 ===========
         self.hsm_blocks = kwargs.pop('hsm_blocks', [])
-        # =================================================
-
-
+   
         self.deploy = deploy
         stride, padding = (4, 0) if not ada_pool else (3, 1)
         if self.deploy:
@@ -287,9 +254,7 @@ class VanillaNet(nn.Module):
 
         self.stages = nn.ModuleList()
 
-
-        #  步骤 2：修改 VanillaNet 构造函数 —— 找到 class VanillaNet 的 __init__ 函数中 `for i in range(len(strides)):` 处
-        self.dw_blocks = kwargs.pop("dw_blocks", [])  # 新增参数控制哪些 block 使用 DW 卷积
+        self.dw_blocks = kwargs.pop("dw_blocks", [])  
         for i in range(len(strides)):
             BlockClass = DepthwiseSeparableBlock if i in self.dw_blocks else Block
             if not ada_pool:
@@ -298,21 +263,20 @@ class VanillaNet(nn.Module):
                 stage = BlockClass(dim=dims[i], dim_out=dims[i+1], act_num=act_num, stride=strides[i], deploy=deploy, ada_pool=ada_pool[i])
             self.stages.append(stage)
 
-        # =========== ④ 为指定 Block 加挂 HSM-SSD ===========
+
         for idx in self.hsm_blocks:
             blk = self.stages[idx]
-            # 标记并初始化 HSM
+       
             blk.use_hsm = True
-            # 通道数由该 Block 输出通道决定
+
             C_out = blk.pointwise.out_channels if isinstance(blk, DepthwiseSeparableBlock) else blk.act.dim
             blk.ln_hsm = nn.LayerNorm(C_out)
 
             #blk.hsm = HSMSSD(d_model=C_out, state_dim=C_out // 4)
 
-            # 用比例来计算 state_dim：
             state_dim = max(1, int(C_out * self.hsm_state_dim_ratio))
             blk.hsm = HSMSSD(d_model=C_out, state_dim=state_dim)
-        # ===================================================
+
 
 
 
@@ -352,7 +316,7 @@ class VanillaNet(nn.Module):
 
 
     def forward(self, x):
-        features = {}  # 用于存放各个 Block 的适配器输出
+        features = {} 
         if self.deploy:
             x = self.stem(x)
         else:
@@ -372,7 +336,7 @@ class VanillaNet(nn.Module):
                 features[f'block_{i}'] = adapter_feat
             else:
                 x = stage_output
-                features[f'block_{i}'] = x  # 若无adapter，直接记录原始输出
+                features[f'block_{i}'] = x 
 
         if self.deploy:
             x = self.cls(x)
@@ -384,8 +348,6 @@ class VanillaNet(nn.Module):
 
             x = self.cls2(x)
 
-
-        # 返回最终分类输出和中间适配器特征字典
         return x.view(x.size(0), -1), features
 
 
