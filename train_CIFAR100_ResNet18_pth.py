@@ -1,3 +1,6 @@
+
+# run this file to generate resnet18_cifar100_best.pth
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
