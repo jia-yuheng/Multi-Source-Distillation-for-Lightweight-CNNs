@@ -79,7 +79,7 @@ These results demonstrate that the proposed distillation framework effectively i
 <div style="width: 90%; margin: 0 auto; text-align: justify;">
 
 <p align="center">
-  <img src="assets/Ablation_Study.png" style="width:100%;">
+  <img src="assets/Ablation Study.png" style="width:70%;">
 </p>
 
 <b>Figure.</b> Ablation study of VanillaNet-6 on CIFAR-100 evaluating progressive integration of KD, AT, DWConv, Gated Activation, and HSM-SSD modules.
