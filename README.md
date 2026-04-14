@@ -162,7 +162,7 @@ These results demonstrate that the proposed distillation framework effectively i
 <div style="width: 90%; margin: 0 auto; text-align: justify;">
 
 <p align="center">
-  <img src="assets/Ablation Study.png" style="width:70%;">
+  <img src="assets/Ablation Study.png" style="width:60%;">
 </p>
 
 <b>Figure.</b> Ablation study of VanillaNet-6 on CIFAR-100 evaluating progressive integration of KD, AT, DWConv, Gated Activation, and HSM-SSD modules.
@@ -187,7 +187,7 @@ Overall, each component provides consistent gains, and their combination demonst
 <div style="width: 90%; margin: 0 auto; text-align: justify;">
 
 <p align="center">
-  <img src="assets/DW_Block study.png" style="width:100%;">
+  <img src="assets/DW_Block study.png" style="width:60%;">
 </p>
 
 <b>Figure.</b> System-level optimization of VanillaNet-6 with Depthwise Separable Convolution (DWConv). The study evaluates progressive replacement across backbone blocks and reports changes in parameters, FLOPs, and Top-1 accuracy.
@@ -205,7 +205,7 @@ Importantly, DWConv reduces computational cost more effectively than parameter c
 <div style="width: 90%; margin: 0 auto; text-align: justify;">
 
 <p align="center">
-  <img src="assets/HSM-SSD Module Overhead.png" style="width:100%;">
+  <img src="assets/HSM-SSD Module Overhead.png" style="width:60%;">
 </p>
 
 <b>Figure.</b> Efficiency–accuracy trade-off of the Hidden-State Mixer-based State Space Duality (HSM-SSD) module under different hidden state dimensions (state_dim).
@@ -227,7 +227,7 @@ These results demonstrate that HSM-SSD is a plug-and-play, task-adaptive context
 <div style="width: 90%; margin: 0 auto; text-align: justify;">
 
 <p align="center">
-  <img src="assets/Grad-CAM++ visualization.png" style="width:100%;">
+  <img src="assets/Grad-CAM++ visualization.png" style="width:95%;">
 </p>
 
 <b>Figure.</b> Grad-CAM++ visualization of VanillaNet-6 and ResNet-18 on CIFAR-100, showing model inputs (with GT and Pred) and corresponding activation heatmaps. Red regions indicate the most discriminative areas contributing to predictions.
@@ -245,7 +245,7 @@ This behavior reflects the inherent limitations of shallow architectures, where 
 <div style="width: 90%; margin: 0 auto; text-align: justify;">
 
 <p align="center">
-  <img src="assets/training dynamics.png" style="width:100%;">
+  <img src="assets/training dynamics.png" style="width:70%;">
 </p>
 
 <b>Figure.</b> Training dynamics comparison between the proposed model and the baseline on CIFAR-100, including Top-1 / Top-5 accuracy and training loss curves.
@@ -257,6 +257,9 @@ In addition, the model maintains a lower and more stable training loss, convergi
 These results confirm that the integration of multi-source distillation, nonlinear activation, and efficient context modeling jointly enhances convergence speed, representation capacity, and overall generalization performance.
 
 </div>
+
+
+
 
 
 
