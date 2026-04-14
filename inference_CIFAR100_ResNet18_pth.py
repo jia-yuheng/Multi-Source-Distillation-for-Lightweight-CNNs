@@ -1,5 +1,5 @@
 
-# Run to verify ResNet-18 teacher performance (81.48% on CIFAR-100).
+# Run to verify ResNet-18 teacher performance (81.48% on CIFAR-100)
 
 import torch
 import torch.nn as nn
