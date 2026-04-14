@@ -7,7 +7,7 @@ Training-time optimization framework for VanillaNet-6 improving representation a
 <div style="width: 90%; margin: 0 auto; text-align: justify;">
 
 <p align="center">
-  <img src="assets/New_Benchmarks_for_ResNet-18.jpg" style="width:100%;">
+  <img src="assets/New_Benchmarks for_ResNet-18.png" style="width:100%;">
 </p>
 
 <b>Figure.</b> New benchmarks for ResNet-18 trained from scratch on CIFAR-10 and CIFAR-100 datasets.
@@ -19,3 +19,8 @@ ResNet-18 achieves **81.48% Top-1 / 95.45% Top-5** on CIFAR-100 and **95.94% Top
 These results demonstrate that a pure CNN architecture can still provide strong classification performance and serve as a reliable and stable teacher for knowledge distillation.
 
 </div>
+
+
+
+
+
