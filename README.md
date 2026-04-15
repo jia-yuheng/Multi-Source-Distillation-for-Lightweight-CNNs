@@ -1,17 +1,16 @@
 # 🚀 Multi-Source Distillation for Ultra-Lightweight CNNs  
 ### Structure–Distillation Co-Optimization Framework on VanillaNet-6
 
-> Achieving **near-ResNet-18 performance** while dramatically reducing computational cost  
+Lightweight convolutional neural networks are widely adopted in edge and resource-constrained applications due to their high efficiency and low deployment cost. However, their performance is often significantly limited by weak representation capacity, restricted receptive fields, and insufficient effectiveness of conventional training strategies.
+
+To address this issue, we propose a **structure–distillation co-optimization framework** built upon VanillaNet-6, which improves model performance from both architectural design and training supervision perspectives while preserving strict efficiency constraints.
+
+> Achieving **near-ResNet-18 performance** with ultra-low computational cost  
 > → Parameters ↓ 85.3% → FLOPs ↓ 51.4% → Latency ↓ 30.1%
 
 ---
 
-## 🔥 Key Results 
-
-Extensive experiments on CIFAR benchmarks demonstrate that the proposed framework consistently improves lightweight CNN performance under strict efficiency constraints:
-
-
-
+## 🔥 Key Results
 
 
 
