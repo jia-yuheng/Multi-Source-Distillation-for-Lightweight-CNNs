@@ -14,7 +14,7 @@ Extensive experiments on CIFAR benchmarks demonstrate that the proposed framewor
 
 
 
----
+
 ### 📊 CIFAR-100 Performance
 
 We evaluate two variants of VanillaNet-6 under the proposed framework:
@@ -43,6 +43,20 @@ We evaluate two variants of VanillaNet-6 under the proposed framework:
   - Parameters → unchanged               - Latency ↓ **3.0%**
 
 ✔ Demonstrates strong robustness in ultra-low resource regimes
+
+
+
+
+---
+## 📎 Other Results
+
+Please see additional experimental results below for more detailed analysis:
+
+- ResNet-18 Benchmark (Teacher Model)
+- CIFAR-10 Performance
+- Grad-CAM++ Visualization
+- Training Dynamics Curves
+
 
 
 
@@ -109,8 +123,7 @@ We evaluate two variants of VanillaNet-6 under the proposed framework:
 → state_dim ratio (ρ = state_dim / C_out)
 
 ✔ Observation:
-→ performance saturates beyond ρ = 1/16  
-→ cost grows linearly  
+→ performance saturates beyond ρ = 1/16      → cost grows linearly  
 
 
 
@@ -124,7 +137,7 @@ We evaluate two variants of VanillaNet-6 under the proposed framework:
 
 This work proposes a **unified structure–distillation co-optimization framework** for ultra-lightweight CNNs, with the following key contributions:
 
----
+
 
 ### 1️⃣ Structure–Distillation Co-Design Paradigm
 
@@ -136,7 +149,7 @@ We introduce a novel perspective that jointly optimizes:
 → Instead of treating network design and knowledge distillation independently,  
 we show that their **co-design leads to significantly improved performance** in shallow networks
 
----
+
 
 ### 2️⃣ Deployment-Friendly Structural Enhancement
 
@@ -156,7 +169,7 @@ We systematically enhance VanillaNet using lightweight yet effective modules:
 
 ✔ All modules are carefully designed to maintain **hardware-friendly structure**
 
----
+
 
 ### 3️⃣ Multi-Source Knowledge Distillation Framework
 
@@ -176,7 +189,7 @@ We propose a unified distillation scheme that integrates complementary supervisi
 → spatial level  
 → feature representation level  
 
----
+
 
 ### 4️⃣ Train–Inference Decoupling Mechanism
 
@@ -192,7 +205,7 @@ A key practical contribution is the design of a **deployment-oriented training s
 → **zero additional inference cost**  
 → full compatibility with efficient deployment pipelines  
 
----
+
 
 ### 5️⃣ Superior Efficiency–Accuracy Trade-off
 
@@ -221,9 +234,9 @@ We build a **training-time optimization framework** upon VanillaNet-6, targeting
 
 The framework consists of two tightly coupled components:
 
----
 
-### 🔹 Structural Enhancement
+
+### 1️⃣  Structural Enhancement
 
 Improves intrinsic modeling capability:
 
@@ -231,9 +244,9 @@ Improves intrinsic modeling capability:
 - Gated Activation → enhanced nonlinear transformation  
 - HSM-SSD → global context aggregation  
 
----
 
-### 🔹 Multi-Level Supervision
+
+### 2️⃣ Multi-Level Supervision
 
 Improves training dynamics and knowledge transfer:
 
@@ -241,9 +254,9 @@ Improves training dynamics and knowledge transfer:
 - AT → spatial guidance  
 - Activation Alignment → representation guidance  
 
----
 
-### 🔹 Train–Inference Decoupling
+
+### 3️⃣ Train–Inference Decoupling
 
 - Training: full model with all modules  
 - Inference: simplified VanillaNet  
@@ -281,8 +294,6 @@ However, this simplicity introduces critical limitations:
 > Lightweight CNN performance is not fundamentally limited by architecture simplicity,  
 but by the **lack of appropriate structural priors and supervision signals**
 
----
-
 ### ✔ Our Solution
 
 We address these issues through:
@@ -301,7 +312,7 @@ We address these issues through:
 
 ## 🏆 Other Results
 
-### 📊 ResNet-18 Benchmark
+### 📊 New ResNet-18 Benchmark (Teacher)
 
 <p align="center">
   <img src="assets/New_Benchmarks for_ResNet-18.png" width="60%">
@@ -317,22 +328,19 @@ We address these issues through:
 
 
 
-
-
 ---
 
 ### 📊 CIFAR-10 Performance
 
 
 <p align="center">
-  <img src="assets/Proposed Model Performance on CIFAR-10.png" width="45%">
+  <img src="assets/Proposed Model Performance on CIFAR-10.png" width="50%">
 </p>
 
 ✔ Significant gain under low-complexity setting
 - Baseline VanillaNet-6:                    → **90.66% Top-1**
 - With proposed framework:                  → **95.15% Top-1 (↑ +4.49%)**
 - Approaching teacher:           → **ResNet-18: 95.94%**
-
 
 
 
@@ -347,15 +355,12 @@ We address these issues through:
   <img src="assets/Grad-CAM++ visualization.png" width="95%">
 </p>
 
-- ResNet-18:
-  → highly localized attention  
+- ResNet-18:         → highly localized attention  
+- VanillaNet:        → diffused activation  
 
-- VanillaNet:
-  → diffused activation  
+✔ Ours improves:          → spatial focus          → discriminative regions  
 
-✔ Ours improves:
-→ spatial focus  
-→ discriminative regions  
+
 
 ---
 
@@ -377,25 +382,12 @@ We address these issues through:
 - More stable optimization  
 - Lower final loss  
 
----
+
 
 ## ✅ Conclusion
 
-This work presents a **structure–distillation co-optimization framework** for ultra-lightweight CNNs:
+Lightweight CNNs are widely used in resource-constrained scenarios due to their efficiency, but their performance is limited by restricted receptive fields, weak global context modeling, limited nonlinear representation, and suboptimal knowledge transfer in shallow architectures.
 
-- Structural improvements:
-  - DWConv → spatial efficiency  
-  - Gated Activation → nonlinear enhancement  
-  - HSM-SSD → global context modeling  
+To address these limitations, this work proposes a structure–distillation co-optimization framework based on VanillaNet-6, enhancing model capacity from both architectural and training perspectives while maintaining strict efficiency constraints. Specifically, we introduce DWConv, Gated Activation, and HSM-SSD for efficient structural modeling, together with multi-source knowledge distillation (KD, AT, and Activation Alignment) for improved supervision.
 
-- Training improvements:
-  - KD + AT + Activation Alignment  
-
-- Deployment guarantee:
-  → **zero inference overhead via decoupling**
-
----
-
-> 💡 Final Insight  
-> High-performance lightweight CNNs require not only efficient architectures,  
-> but also **well-designed training strategies and supervision mechanisms**
+A key result of this work is that lightweight model performance is not only determined by architectural efficiency, but also by the quality of training supervision and structural inductive bias. By jointly optimizing both aspects, the proposed framework significantly narrows the performance gap between lightweight models and larger networks while preserving zero additional inference overhead.
